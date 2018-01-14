@@ -1,2 +1,1 @@
-# Main_power_meter
-Main power meter
+For the hardware part, see my instructable:
