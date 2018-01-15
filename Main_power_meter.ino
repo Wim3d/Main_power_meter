@@ -1,10 +1,11 @@
 /*
    Written by W. Hoogervorst
-   Power meter
+   Main electricity power meter
+   jan 2018
 */
 #include <ESP8266WiFi.h>
 #include <PubSubClient.h>
-#include <credentials.h>
+#include <credentials.h>      //mySSID, myPASSWORD
 
 // define times
 #define SECOND 1e3  // 1e3 ms is 1 second
@@ -32,15 +33,14 @@ uint32_t time1, time2, pulsebegin, pulselength, measurementbegin, lastpulse, tim
 uint16_t pulsecount = 0;
 uint32_t totalcounter = 0;
 boolean pulsestate = false; // false: not detecting a pulse
-boolean pulse_error = false;   // error in detecting, no counting
 boolean measurement = false;   // not measuring yet
-boolean debug = false;        // if true debug messages are published via MQTT
+boolean debug = false;        // switched by mechanical switch, if true debug messages are published via MQTT
 
 String tmp_str; // String for publishing the int's as a string to MQTT
 char buf[5];
 
 void setup() {
-  WiFi.setOutputPower(0); // 0 is lowest, 20.5 is highest (http://www.esp8266.com/viewtopic.php?f=32&t=13496)
+  WiFi.setOutputPower(0); // 0 is lowest (close to AP), 20.5 is highest (http://www.esp8266.com/viewtopic.php?f=32&t=13496)
   WiFi.mode(WIFI_STA);
   pinMode(LEDPIN, OUTPUT);
   pinMode(INPUTPIN, INPUT);
@@ -75,7 +75,7 @@ void loop()
     }
   }
 
-  if (digitalRead(DEBUGPIN) == HIGH) {      // switch on GPIO3 determines the state
+  if (digitalRead(DEBUGPIN) == HIGH) {      // switch on GPIO3 determines the state of 'debug'
     debug = true;
   }
   else {
@@ -110,7 +110,7 @@ void loop()
       pulsecount++;               // increase counters
       totalcounter++;
       lastpulse = millis();       // measure te moment of the last pulse in the measurement
-      if (debug)      // publish debug messages
+      if (debug)      // publish debug messages?
       {
         tmp_str = String(pulselength); //converting count to a string
         tmp_str.toCharArray(buf, tmp_str.length() + 1);
@@ -120,7 +120,7 @@ void loop()
         tmp_str.toCharArray(buf, tmp_str.length() + 1);
         MQTTclient.publish("ESP-01_2/state", buf);
       }
-      if (totalcounter % TOTALDELAY == 0)      // publish value every ## times
+      if (totalcounter % TOTALDELAY == 0)      // publish value every ## times as status update
       {
         MQTTclient.publish("ESP-01_2/state", "total counts:");
         tmp_str = String(totalcounter); //converting count to a string
