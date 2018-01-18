@@ -138,7 +138,6 @@ void loop()
     if (debug)      // publish debug messages
     {
       MQTTclient.publish("ESP-01_2/state", "measurement ended");
-
     }
     tmp_str = String(pulsecount); //converting count to a string
     tmp_str.toCharArray(buf, tmp_str.length() + 1);
@@ -152,17 +151,7 @@ void loop()
     //MQTTclient.publish("ESP-01_2/state", buf);
     MQTTclient.publish("sensor/powerW", buf);
 
-    // old calculation
-    // extrapolate measurement period to one hour
-    //hourcount = pulsecount * ((HOUR) / (MEASUREMENT));
-
-    // calculate power in kW
-    // MQTTclient.publish("ESP-01/input", "Power (W):");
-    //tmp_str = String(hourcount); //converting number to a string
-    //tmp_str.toCharArray(buf, tmp_str.length() + 1);
-    // MQTTclient.publish("ESP-01_2/state", buf);
-    // MQTTclient.publish("sensor/powerW_old", buf);
-
+    // clean up values
     pulsecount = 0;
     measurement = false;
   }
