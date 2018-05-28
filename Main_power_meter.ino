@@ -29,8 +29,9 @@ WiFiClient client;
 PubSubClient MQTTclient(client);
 
 // global variables
-uint32_t time1, time2, pulsebegin, pulselength, measurementbegin, lastpulse, time_elapsed, lastReconnectAttempt = 0;
-uint16_t pulsecount = 0;
+uint32_t  time_elapsed;
+uint64_t time1, time2, pulsebegin, measurementbegin, lastpulse, lastReconnectAttempt = 0;
+uint16_t pulselength, pulsecount = 0;
 uint32_t totalcounter = 0;
 boolean pulsestate = false; // false: not detecting a pulse
 boolean measurement = false;   // not measuring yet
