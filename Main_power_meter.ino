@@ -29,8 +29,8 @@ WiFiClient client;
 PubSubClient MQTTclient(client);
 
 // global variables
-uint32_t  time_elapsed;
-uint64_t time1, time2, pulsebegin, measurementbegin, lastpulse, lastReconnectAttempt = 0;
+// use 64 byte otherwise the calculation fails after 2^32 millis = ca. 50 days 
+uint64_t time_elapsed, time1, time2, pulsebegin, measurementbegin, lastpulse, lastReconnectAttempt = 0;
 uint16_t pulselength, pulsecount = 0;
 uint32_t totalcounter = 0;
 boolean pulsestate = false; // false: not detecting a pulse
