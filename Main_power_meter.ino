@@ -157,7 +157,7 @@ void loop() {
     time_elapsed = lastpulse - measurementbegin;                             // the last detected pulse defines the actual measurement period
     hourcount = (pulsecount - 1) * ((HOUR) / (time_elapsed - pulselength));  //this gives the power per hour, the last pulse must be substracted, because we should measure until the beginning of the pulse, 
     powerW = hourcount/(2000/1000);                                         // my power meter gives 2000 pulses per kWh (1000 Wh) 
-    tmp_str = String(hourcount);                                             //converting number to a string
+    tmp_str = String(powerW);                                             //converting number to a string
     tmp_str.toCharArray(buf, tmp_str.length() + 1);
     //client.publish("ESP-01_2/state", buf);
     client.publish("sensor/powerW", buf);
